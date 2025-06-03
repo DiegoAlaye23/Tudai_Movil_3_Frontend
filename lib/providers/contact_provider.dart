@@ -6,8 +6,10 @@ class ContactProvider extends ChangeNotifier {
   final ContactService _contactService = ContactService();
 
   List<Contact> _contactos = [];
-  List<Contact> get contactos => _contactos;
   bool _isLoading = false;
+
+  List<Contact> get contactos => _contactos;
+  bool get isLoading => _isLoading;
 
   ContactProvider() {
     fetchContactsFromApi();
@@ -15,15 +17,13 @@ class ContactProvider extends ChangeNotifier {
 
   // Cargar contactos desde el backend
   Future<void> fetchContactsFromApi() async {
-    _isLoading = true;
     notifyListeners();
-
+    _isLoading = true;
     try {
       _contactos = await _contactService.getContacts();
     } catch (e) {
       print('Error fetching contacts: $e');
     }
-
     _isLoading = false;
     notifyListeners();
   }
@@ -75,6 +75,10 @@ class ContactProvider extends ChangeNotifier {
       print('Error deleting contact: $e');
       return false;
     }
+  }
+
+  void refreshContacts() {
+    fetchContactsFromApi();
   }
 
   // Opcional: limpiar lista local (no afecta backend)

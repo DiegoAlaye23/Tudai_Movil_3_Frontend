@@ -11,7 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ContactProvider()),
       ],
-      child: ContactosApp(),
+      child: const ContactosApp(),
     ),
   );
 }
@@ -50,7 +50,9 @@ class AuthCheckScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          return snapshot.data == true ? ContactListScreen() : LoginScreen();
+          return snapshot.data == true
+              ? const ContactListScreen()
+              : const LoginScreen();
         }
       },
     );

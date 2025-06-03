@@ -31,7 +31,7 @@ class _AddContactScreenState extends State<AddContactScreen> {
     }
   }
 
-  void _saveContact() {
+  void _saveContact() async {
     String nombre = _nombreController.text;
     String apellido = _apellidoController.text;
     int telefono = int.parse(_telefonoController.text);
@@ -50,14 +50,14 @@ class _AddContactScreenState extends State<AddContactScreen> {
       final contactProvider =
           Provider.of<ContactProvider>(context, listen: false);
       if (widget.contact == null) {
-        // Agregar nuevo contacto
         contactProvider.addContact(newContact);
+        await contactProvider.fetchContactsFromApi();
       } else {
-        // Editar contacto existente
         contactProvider.updateContact(newContact);
+        await contactProvider.fetchContactsFromApi();
       }
-
-      Navigator.pop(context);
+      await contactProvider.fetchContactsFromApi();
+      Navigator.pop(context, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Por favor completa todos los campos")),

@@ -6,6 +6,15 @@ import 'api_service.dart';
 class ContactService {
   final ApiService _apiService = ApiService();
 
+  ContactService() {
+    _apiService.init();
+    _initialize(); // Asegura que el token se carga
+  }
+
+  Future<void> _initialize() async {
+    await _apiService.init();
+  }
+
   Future<List<Contact>> getContacts() async {
     final response = await _apiService.dio.get('/api/contactos');
     final List data = response.data as List;

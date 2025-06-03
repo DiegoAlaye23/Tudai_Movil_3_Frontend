@@ -18,7 +18,7 @@ class ContactListScreen extends StatelessWidget {
       contactProvider
           .clearContacts(); // Limpia la lista de contactos en el proveedor
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
         (Route<dynamic> route) => false,
       ); // Navega a la pantalla de inicio de sesión y elimina el historial de rutas
     }
@@ -46,13 +46,19 @@ class ContactListScreen extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AddContactScreen()),
-              );
+                MaterialPageRoute(
+                    builder: (context) => const AddContactScreen()),
+              ).then((value) {
+                if (value == true) {
+                  // Esto forzará la reconstrucción de la UI
+                  contactProvider.refreshContacts();
+                }
+              });
             },
           ),
         ],
       ),
-      body: contactProvider.contactos.isEmpty
+      body: contactProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : contactProvider.contactos.isEmpty
               ? const Center(

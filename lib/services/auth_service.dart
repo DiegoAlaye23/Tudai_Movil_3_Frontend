@@ -22,7 +22,7 @@ class AuthService {
         }
       }
       return false;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       print('Error en login: ${e.response?.data ?? e.message}');
       return false;
     }

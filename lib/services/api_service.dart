@@ -12,6 +12,13 @@ class ApiService {
     ),
   );
 
+  Future<void> init() async {
+    final token = await getToken();
+    if (token != null) {
+      dio.options.headers['Authorization'] = 'Bearer $token';
+    }
+  }
+
   Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
