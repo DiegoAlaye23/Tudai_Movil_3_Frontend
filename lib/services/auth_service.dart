@@ -37,28 +37,37 @@ class AuthService {
     return token != null;
   }
 
-  Future<bool> register({
+  Future<String?> register({
     required String nombreApellido,
     required String email,
     required String password,
-    List<Map<String, dynamic>>? contactos,
   }) async {
     try {
       final response = await _apiService.dio.post(
         '/api/Usuarios/register',
         data: {
-          'usuarioId': 0,
-          'nombreApellido': nombreApellido,
-          'email': email,
-          'password': password,
-          'activo': true,
-          'contactos': contactos ?? [],
+          "usuarioId": 0,
+          "nombreApellido": nombreApellido,
+          "email": email,
+          "password": password,
+          "activo": true,
+          "contactos": [
+            {
+              "contactoId": 0,
+              "nombre": "string",
+              "apellido": "string",
+              "telefono": 0,
+              "email": "string",
+              "activo": true
+            }
+          ],
         },
       );
-      return response.statusCode == 201;
+      return response.statusCode == 201 ? null : "Registro fallido";
     } on DioException catch (e) {
-      print('Error en registro: ${e.response?.data ?? e.message}');
-      return false;
+      final message = e.response?.data?.toString() ?? e.message;
+      print('Error en registro: $message');
+      return message;
     }
   }
 }
