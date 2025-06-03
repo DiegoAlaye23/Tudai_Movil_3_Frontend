@@ -40,21 +40,20 @@ class _AddContactScreenState extends State<AddContactScreen> {
     if (nombre.isNotEmpty && apellido.isNotEmpty && email.isNotEmpty) {
       // Crear o actualizar el objeto Contact
       Contact newContact = Contact(
-        id: widget.contact?.id, // Mantener el mismo ID si estamos editando
-        nombre: nombre,
-        apellido: apellido,
-        telefono: telefono,
-        email: email,
-      );
+          contactoId: widget
+              .contact?.contactoId, // Mantener el mismo ID si estamos editando
+          nombre: nombre,
+          apellido: apellido,
+          telefono: telefono,
+          email: email,
+          activo: true);
 
       final contactProvider =
           Provider.of<ContactProvider>(context, listen: false);
       if (widget.contact == null) {
         contactProvider.addContact(newContact);
-        await contactProvider.fetchContactsFromApi();
       } else {
         contactProvider.updateContact(newContact);
-        await contactProvider.fetchContactsFromApi();
       }
       await contactProvider.fetchContactsFromApi();
       Navigator.pop(context, true);

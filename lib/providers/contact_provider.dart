@@ -32,9 +32,9 @@ class ContactProvider extends ChangeNotifier {
   Future<bool> addContact(Contact contact) async {
     try {
       final success = await _contactService.addContact(contact);
+
       if (success) {
-        _contactos.add(contact);
-        notifyListeners();
+        await fetchContactsFromApi();
       }
       return success;
     } catch (e) {
@@ -48,12 +48,14 @@ class ContactProvider extends ChangeNotifier {
     try {
       final success = await _contactService.updateContact(updatedContact);
       if (success) {
-        int index = _contactos.indexWhere((c) => c.id == updatedContact.id);
+        int index = _contactos
+            .indexWhere((c) => c.contactoId == updatedContact.contactoId);
         if (index != -1) {
           _contactos[index] = updatedContact;
-          notifyListeners();
+          await fetchContactsFromApi();
         }
       }
+
       return success;
     } catch (e) {
       print('Error updating contact: $e');
@@ -64,11 +66,11 @@ class ContactProvider extends ChangeNotifier {
   // Eliminar contacto (API + local)
   Future<bool> deleteContact(Contact contact) async {
     try {
-      if (contact.id == null) return false;
-      final success = await _contactService.deleteContact(contact.id!);
+      if (contact.contactoId == null) return false;
+      final success = await _contactService.deleteContact(contact.contactoId!);
       if (success) {
-        _contactos.removeWhere((c) => c.id == contact.id);
-        notifyListeners();
+        _contactos.removeWhere((c) => c.contactoId == contact.contactoId);
+        await fetchContactsFromApi();
       }
       return success;
     } catch (e) {

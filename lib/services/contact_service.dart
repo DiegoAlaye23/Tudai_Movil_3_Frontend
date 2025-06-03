@@ -27,17 +27,24 @@ class ContactService {
   }
 
   Future<bool> addContact(Contact contact) async {
-    final response =
-        await _apiService.dio.post('/api/contactos', data: contact.toMap());
-    return response.statusCode == 201;
+    try {
+      final response = await _apiService.dio.post(
+        '/api/contactos',
+        data: contact.toMap(),
+      );
+      return response.statusCode == 201;
+    } on DioException catch (e) {
+      print('Error al agregar contacto: ${e.response?.data}');
+      return false;
+    }
   }
 
   Future<bool> updateContact(Contact contact) async {
-    if (contact.id == null) return false;
+    if (contact.contactoId == null) return false;
 
     try {
       final response = await _apiService.dio.put(
-        '/api/contactos/${contact.id}',
+        '/api/contactos/${contact.contactoId}',
         data: contact.toMap(),
       );
       print('Status code: ${response.statusCode}');
