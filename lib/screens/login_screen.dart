@@ -1,3 +1,4 @@
+import 'package:contactos_app/screens/%20register_screen.dart';
 import 'package:flutter/material.dart';
 import 'contact_list_screen.dart';
 import '../services/auth_service.dart';
@@ -29,6 +30,13 @@ class _LoginScreenState extends State<LoginScreen> {
         const SnackBar(content: Text("Usuario o contraseña incorrecta")),
       );
     }
+  }
+
+  void _goToRegister() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const RegisterScreen()),
+    );
   }
 
   @override
@@ -66,6 +74,11 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 30),
             ElevatedButton(
                 onPressed: _login, child: const Text('Iniciar sesión')),
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: _goToRegister,
+              child: const Text('¿No tenés cuenta? Registrate aquí'),
+            ),
           ],
         ),
       ),

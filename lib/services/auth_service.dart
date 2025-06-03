@@ -36,4 +36,29 @@ class AuthService {
     final token = await _apiService.getToken();
     return token != null;
   }
+
+  Future<bool> register({
+    required String nombreApellido,
+    required String email,
+    required String password,
+    List<Map<String, dynamic>>? contactos,
+  }) async {
+    try {
+      final response = await _apiService.dio.post(
+        '/api/Usuarios/register',
+        data: {
+          'usuarioId': 0,
+          'nombreApellido': nombreApellido,
+          'email': email,
+          'password': password,
+          'activo': true,
+          'contactos': contactos ?? [],
+        },
+      );
+      return response.statusCode == 201;
+    } on DioException catch (e) {
+      print('Error en registro: ${e.response?.data ?? e.message}');
+      return false;
+    }
+  }
 }
